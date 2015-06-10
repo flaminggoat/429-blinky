@@ -10,15 +10,20 @@ build_dir = 'build'
 
 sources = glob.glob('src/*.[cs]')
 
-std_periph_src = '/home/theo/Embedded/STM32F4xx_DSP_StdPeriph_Lib_V1.5.1/Libraries/STM32F4xx_StdPeriph_Driver/src/'
+std_periph = '/home/theo/Embedded/STM32F4xx_DSP_StdPeriph_Lib_V1.5.1/'
+std_periph_src = std_periph + 'Libraries/STM32F4xx_StdPeriph_Driver/src/'
+std_periph_inc = std_periph + 'Libraries/STM32F4xx_StdPeriph_Driver/inc/'
+std_periph_device = std_periph + 'Libraries/CMSIS/Device/ST/STM32F4xx/Include/'
+std_periph_cmsis = std_periph + 'Libraries/CMSIS/Include/'
+
 sources.append(std_periph_src + 'stm32f4xx_gpio.c')
 sources.append(std_periph_src + 'stm32f4xx_rcc.c')
 
 include_dirs = ['inc', 
 				'cow',
-				'/home/theo/Embedded/STM32F4xx_DSP_StdPeriph_Lib_V1.5.1/Libraries/STM32F4xx_StdPeriph_Driver/inc',
-				'/home/theo/Embedded/STM32F4xx_DSP_StdPeriph_Lib_V1.5.1/Libraries/CMSIS/Device/ST/STM32F4xx/Include',
-				'/home/theo/Embedded/STM32F4xx_DSP_StdPeriph_Lib_V1.5.1/Libraries/CMSIS/Include/']
+				std_periph_inc,
+				std_periph_device,
+				std_periph_cmsis]
 
 exe = build_dir + '/' + project + '.' + extension
 
@@ -44,7 +49,7 @@ def build() :
 		objects.append(out)
 		#Compile source files if they have been modified since the last build
 		if(os.path.getmtime(source) > last_built):
-			print(source)
+			print(os.path.basename(source))
 			os.system(cc + ' -c ' + source + ' -o ' + out  + ' -I'.join([''] + include_dirs) + ' ' + cflags)
 
 	#link executable
